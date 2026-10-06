@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "Guest meeting time",
+  "version": "0.1.4",
+  "description": "Adds the open Google Calendar event's time to a guest's profile card, in that guest's timezone.",
+  "host_permissions": [
+    "https://calendar.google.com/*",
+    "https://contacts.google.com/widget/hovercard/*"
+  ],
+  "background": {
+    "service_worker": "src/background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://calendar.google.com/*"],
+      "js": ["src/logic.js", "src/calendar.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://contacts.google.com/widget/hovercard/*"],
+      "js": ["src/hovercard-hook.js"],
+      "run_at": "document_start",
+      "all_frames": true,
+      "world": "MAIN"
+    },
+    {
+      "matches": ["https://contacts.google.com/widget/hovercard/*"],
+      "js": ["src/logic.js", "src/hovercard.js"],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ]
+}
